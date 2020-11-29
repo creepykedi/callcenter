@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% extends "basic.html" %}
+    {% block head %}
+    <title>База</title>
+        {% load static %}
+    <style>
+       table {border-collapse:collapse;}
+       table .display td {border:solid 1px #fab; word-wrap:break-word;}
+   </style>
+    {% endblock %}
+</head>
+<body>
+{% block body %}
+<a href={% url 'bases' %}> К списку баз</a>
+<h3 class="mx-2 my-3">{{ table.name }} </h3>
+    <a class="btn btn-info m-3" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Фильтры
+    </a>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body">
+   <table border="0" cellspacing="5" cellpadding="5" class="my-2">
+        <tbody><tr>
+            <td>Цена от:</td>
+            <td><input type="text" id="min" name="min"></td>
+        </tr>
+        <tr>
+            <td>Цена до:</td>
+            <td><input type="text" id="max" name="max"></td>
+        </tr>
+    </tbody></table>
+  </div>
+</div>
+
+<div class="px-4">
+    <table style="width: 100%" class="table mt-2 display compact" id="database">
+      <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Дата</th>
+            <th scope="col">Проект</th>
+            <th scope="col">Цена, руб.</th>
+            <th scope="col">Номеров</th>
+            <th scope="col">Использовали</th>
+            <th scope="col">Остаток</th>
+            <th scope="col">Источник</th>
+            <th scope="col">Как собиралась</th>
+            <th scope="col">Отвественный</th>
+            <th class="link">Ссылка</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Комментарий</th>
+            <th scope="col">Цена номера</th>
+        </tr>
+      </thead>
+    </table>
+
+<button class="btn btn-primary mt-3" type="button">
+    <a href="{% url 'upload' %}?table_id={{ request.GET.t }}">Добавить</a>
+</button>
+
+</div>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script>
+    $.fn.dataTable.ext.search.push(
+    function( settings, data, dataIndex ) {
+        var min = parseInt( $('#min').val(), 10 );
+        var max = parseInt( $('#max').val(), 10 );
+        var price = parseFloat( data[3] ) || 0;
+
+        if ( ( isNaN( min ) && isNaN( max ) ) ||
+             ( isNaN( min ) && price <= max ) ||
+             ( min <= price   && isNaN( max ) ) ||
+             ( min <= price   && price <= max ) )
+        {
+            return true;
+        }
+        return false;
+    }
+);
+    </script>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+    var table = $('#database').DataTable( {
+        "ajax": {
+            url: "{% url 'js' request.GET.t %}",
+            dataSrc: "",
+            "bServerSide": true,
+            "bProcessing": true,
+        },
+        "pageLength": 10,
+        "columns":[
+            {"data": "id",
+            "render": function ( data ) {
+                if (data){
+                return '<a href="row/'+data+'">'+data+'</a>';}
+                },
+            },
+            {"data": "date"},
+            {"data": "project.name"},
+            {"data": "price"},
+            {"data": "numbers"},
+            {"data": "used"},
+            {"data": "remaining"},
+            {"data": "source.name"},
+            {"data": "formation"},
+            {"data": "responsible"},
+            {"data": "link",
+            "render": function ( data ) {
+                if (data){
+                return '<a href="'+data+'">link</a>';}
+                else{
+                    return null
+                }
+              }},
+            {"data": "status",
+            render: function ( data ) {
+            if (data===true) {
+                data = "+";
+                return data}
+            else {data=null;
+                return data}
+            }},
+            {"data": "comments"},
+            {"data": "cost_per_number",
+            render: function ( data ) {
+            return data.toFixed(2); }
+            },
+        ],
+        "aoColumnDefs": [{
+            "aTargets": [2],
+        }]
+        });
+
+    $('#min, #max').keyup( function() {
+        table.draw();
+    } );
+} );
+</script>
+{% endblock %}
+</body>
+</html>

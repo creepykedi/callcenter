@@ -1,0 +1,15 @@
+button a {
+    color: white;
+}
+button a:hover{
+    text-decoration: unset;
+    color: white;
+}
+
+#upload{
+    border: 1px grey solid;
+    border-radius: 6px;
+}
+.hide{
+    display: none;
+}

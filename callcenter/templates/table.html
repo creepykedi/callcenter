@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% extends "basic.html" %}
+    {% block head %}
+    <title>База</title>
+    {% endblock %}
+</head>
+<body>
+{% block body %}
+<a href={% url 'bases' %}> К списку баз</a>
+<h3 class="mx-2 my-3">{{ table.name }} </h3>
+<div class="px-4">
+
+    <table class="table mt-2">
+      <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Дата</th>
+            <th scope="col">Проект</th>
+            <th scope="col">Цена, руб.</th>
+            <th scope="col">Номеров</th>
+            <th scope="col">Использовали</th>
+            <th scope="col">Остаток</th>
+            <th scope="col">Источник</th>
+            <th scope="col">Как собиралась</th>
+            <th scope="col">Отвественный</th>
+            <th scope="col">Ссылка</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Комментарий</th>
+            <th scope="col">Цена номера</th>
+        </tr>
+      </thead>
+    <tbody>
+
+    {% for row in data %}
+        <tr>
+            <td>{{ row.id }}</td>
+            <td>{{ row.date|date:" d.m.Y" }}</td>
+            <td>{{ row.project }}</td>
+            <td>{{ row.price|floatformat }}</td>
+            <td>{{ row.numbers }}</td>
+            <td>{{ row.used }}</td>
+            <td>{{ row.remaining }}</td>
+            <td>{{ row.source }}</td>
+            <td>{{ row.formation }}</td>
+            <td>{{ row.responsible }}</td>
+            <td class="link"> {%  if row.link %}
+                <a href={{ row.link }}>link</a>
+                {% endif %}
+            </td>
+            <td>
+                {%  if row.status %}
+                 +
+                {% endif %}
+            </td>
+            <td>{{ row.comments }}</td>
+            <td>{{ row.cost_per_number|floatformat:-2 }}</td>
+         </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+
+
+</div>
+{% endblock %}
+</body>
+
+</html>

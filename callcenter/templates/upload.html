@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% extends "basic.html" %}
+    {% block head %}
+    <meta charset="UTF-8">
+    <title>Загрузить</title>
+    {% endblock %}
+
+</head>
+<body>
+{% block body %}
+    <form method="post" enctype="multipart/form-data">
+      {% if  request.GET.table_id %}
+          <h3>Добавить к списку </h3>
+        {% endif %}
+     <div id="upload" class="form-group p-4 col-6">
+        {% csrf_token %}
+
+        <label for="table-upload">Загрузить csv</label>
+        <div class="py-3">
+        <input type="file" class="form-control-file" id="table-upload" name="file">
+            {% if  request.GET.table_id %}
+                <input class="hide" type='number' name='table_id' value={{ request.GET.table_id }} />
+            {% endif %}
+         </div>
+        <button class="btn btn-primary mt-3" type="submit">Загрузить</button>
+     </div>
+    </form>
+ <a href={% url 'bases' %}> К списку баз</a>
+{% endblock %}
+</body>
+</html>

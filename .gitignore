@@ -3,6 +3,7 @@
 bin/
 include/
 pip-selfcheck.json
+db.sqlite3
 
 # Django related
 # src/<yourproject>/settings/local.py

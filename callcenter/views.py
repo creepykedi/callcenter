@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.urls import reverse
+from .constants import *
 from rest_framework.decorators import api_view
 from .models import Main, Table, Contractor, Sources
 from .serializers import MainSerializer
@@ -55,34 +56,34 @@ def upload_table(request):
         base = Table.objects.get(pk=table_id)
     else:
         base, _ = Table.objects.get_or_create(name=csv_file.name, file=csv_file)
-    for column in csv.reader(io_str, delimiter=",", quotechar="|"):
-        if "+" in column[9]:
-            column[9] = True
+    for row in csv.reader(io_str, delimiter=",", quotechar="|"):
+        if "+" in row[STATUS]:
+            row[STATUS] = True
         else:
-            column[9] = False
+            row[STATUS] = False
 
         try:
-            column[4] = int(column[4])
+            row[USED] = int(row[USED])
         except ValueError:
-            column[4] = 0
+            row[USED] = 0
 
-        column[0] = reformat_date(column[0])
-        column[2] = format_price(column[2])
+        row[DATE] = reformat_date(row[DATE])
+        row[PRICE] = format_price(row[PRICE])
 
-        contractor = create_contractor(column[1])
-        source, _ = Sources.objects.get_or_create(name=column[5])
+        contractor = create_contractor(row[PROJECT])
+        source, _ = Sources.objects.get_or_create(name=row[SOURCE])
         _, created = Main.objects.update_or_create(
-            date=column[0],
+            date=row[DATE],
             project=contractor,
-            price=column[2],
-            numbers=column[3],
-            used=column[4],
+            price=row[PRICE],
+            numbers=row[NUMBERS],
+            used=row[USED],
             source=source,
-            formation=column[6],
-            responsible=column[7],
-            link=column[8],
-            status=column[9],
-            comments=column[10],
+            formation=row[FORMATION],
+            responsible=row[RESPONSIBLE],
+            link=row[LINK],
+            status=row[STATUS],
+            comments=row[COMMENTS],
             related_model=base
         )
 

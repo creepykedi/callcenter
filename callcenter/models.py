@@ -26,19 +26,21 @@ class Sources(models.Model):
 
 
 class Main(models.Model):
-    date = models.DateField()
-    project = models.ForeignKey(Contractor, on_delete=models.CASCADE, null=True, blank=True)
-    price = models.DecimalField(max_digits=16, decimal_places=2, null=True, blank=True)
-    numbers = models.IntegerField(null=True, blank=True)
-    used = models.IntegerField(default=0, blank=True)
-    remaining = models.IntegerField(null=True, blank=True)
-    source = models.ForeignKey(Sources, on_delete=models.CASCADE, null=True, blank=True)
-    formation = models.CharField(max_length=256, null=True, blank=True)
-    responsible = models.CharField(max_length=256, null=True, blank=True)
-    link = models.URLField(null=True, blank=True)
-    status = models.BooleanField(null=True, blank=True, default=False)
-    comments = models.TextField(null=True, blank=True)
-    cost_per_number = models.FloatField(null=True, blank=True)
+    date = models.DateField(verbose_name="Дата")
+    project = models.ForeignKey(Contractor, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Проект")
+    price = models.DecimalField(max_digits=16, decimal_places=2, null=True,
+                                blank=True, verbose_name="Цена")
+    numbers = models.IntegerField(null=True, blank=True, verbose_name="Количество")
+    used = models.IntegerField(default=0, blank=True, verbose_name="Использовано")
+    remaining = models.IntegerField(null=True, blank=True, verbose_name="Остаток")
+    source = models.ForeignKey(Sources, on_delete=models.CASCADE, null=True,
+                               blank=True, verbose_name="Источник")
+    formation = models.CharField(max_length=256, null=True, blank=True, verbose_name="Сформировано из")
+    responsible = models.CharField(max_length=256, null=True, blank=True, verbose_name="Ответственный")
+    link = models.URLField(null=True, blank=True, verbose_name="Ссылка")
+    status = models.BooleanField(null=True, blank=True, default=False, verbose_name="Статус")
+    comments = models.TextField(null=True, blank=True, verbose_name="Комментариий")
+    cost_per_number = models.FloatField(null=True, blank=True, verbose_name="Цена за номер")
     related_model = models.ForeignKey(Table, on_delete=models.CASCADE, null=True, blank=True)
 
     def calculate_cost(self):

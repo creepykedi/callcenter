@@ -136,8 +136,8 @@ class drfTableView(TemplateView):
 class update_table_row(UpdateView):
     model = Main
     fields = ['date', 'price', 'project', 'price', 'numbers',
-              'used', 'source', 'formation', 'link', 'status',
-              'comments']
+              'used', 'source', 'formation', 'link',
+              'responsible', 'comments']
     template_name = 'tablerow.html'
 
     def get_success_url(self):

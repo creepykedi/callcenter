@@ -10,7 +10,7 @@
 </head>
 <body>
 {% block body %}
-<h3>Исправить поле {{ object.pk }} </h3>
+<h4 class="m-2 p-3">Исправить поле {{ object.pk }} </h4>
 <div class="col-6 ml-3">
 <form method="post" >{% csrf_token %}
     {{ form|crispy }}

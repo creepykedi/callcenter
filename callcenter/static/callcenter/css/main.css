@@ -13,3 +13,7 @@ button a:hover{
 .hide{
     display: none;
 }
+
+textarea {
+    max-height: 60px;
+}

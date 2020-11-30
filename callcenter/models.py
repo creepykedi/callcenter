@@ -66,5 +66,3 @@ class Main(models.Model):
         self.calculate_cost()
         self.calculate_remaining()
         super(Main, self).save(*args, **kwargs)
-
-

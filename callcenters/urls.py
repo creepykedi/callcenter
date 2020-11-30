@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from callcenter.views import upload_table, bases_view,  \
-    delete_base_file, get_json_database, drfTableView, update_table_row
+    delete_base_file, get_json_database, DrfTableView, UpdateTableRow
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,6 +24,6 @@ urlpatterns = [
     path('', bases_view, name="bases"),
     path('tablesjs/<int:id>', get_json_database, name="js"),
     path('table/delete/<int:id>', delete_base_file, name="delete_db"),
-    path('table/<int:id>', drfTableView.as_view(), name="new"),
-    path('table/row/<slug:pk>', update_table_row.as_view(), name="update_row"),
+    path('table/<int:id>', DrfTableView.as_view(), name="new"),
+    path('table/row/<slug:pk>', UpdateTableRow.as_view(), name="update_row"),
 ]

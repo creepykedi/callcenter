@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseBadRequest, JsonResponse
-from django.http import QueryDict
 from django.urls import reverse
 from rest_framework.decorators import api_view
 from .models import Main, Table, Contractor, Sources
@@ -129,16 +128,18 @@ def get_json_database(request, id):
     return JsonResponse(serializer.data, safe=False)
 
 
-class drfTableView(TemplateView):
+class DrfTableView(TemplateView):
     template_name = 'drf_Table.html'
 
 
-class update_table_row(UpdateView):
+class UpdateTableRow(UpdateView):
     model = Main
     fields = ['date', 'price', 'project', 'price', 'numbers',
               'used', 'source', 'formation', 'link',
               'responsible', 'comments']
+
     template_name = 'tablerow.html'
 
     def get_success_url(self):
-        return reverse('bases')
+        url = reverse('new', kwargs={'id': self.object.related_model.id})
+        return url + f"?t={self.object.related_model.id}"
